@@ -34,10 +34,10 @@
             },
 
             'should returns a minified copy': function (topic) {
-                var input = linq(topic.input).select(function (buffer) {
+                var input = linq(topic.input.all).select(function (buffer) {
                         return buffer.toString().replace(/\r/g, '');
                     }).run(),
-                    baseline = linq(topic.baseline).select(function (buffer) {
+                    baseline = linq(topic.baseline.all).select(function (buffer) {
                         return buffer.toString().replace(/\r/g, '');
                     }).run();
 
