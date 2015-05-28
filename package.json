@@ -1,0 +1,30 @@
+{
+  "name": "publishjs-jsx",
+  "version": "0.0.1-dev",
+  "description": "Integrate JSX with PublishJS",
+  "keywords": [
+    "jsx",
+    "reactjs",
+    "react-tools",
+    "grunt",
+    "gulp",
+    "publishjs"
+  ],
+  "license": "MIT",
+  "email": "william.wong@candrholdings.com",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/candrholdings/publishjs-jsx.git"
+  },
+  "scripts": {
+    "test": "vows src/test/*-test.js --spec"
+  },
+  "dependencies": {
+    "publishjs": "file:..\\core",
+    "react-tools": "^0.13.3"
+  },
+  "devDependencies": {
+    "vows": "^0.8.1"
+  }
+}
