@@ -21,7 +21,7 @@
     "test": "vows src/test/*-test.js --spec"
   },
   "dependencies": {
-    "publishjs": "file:..\\core",
+    "publishjs": "git:git@github.com:candrholdings/publishjs.git",
     "react-tools": "^0.13.3"
   },
   "devDependencies": {
