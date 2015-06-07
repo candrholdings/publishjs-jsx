@@ -18,19 +18,19 @@
         Object.getOwnPropertyNames(inputs).forEach(function (filename) {
             var startTime = Date.now(),
                 original = inputs[filename],
-                minified = outputs[filename] = new Buffer(processFile(filename, original.toString(), args));
+                transformed = outputs[filename] = new Buffer(processFile(filename, original.toString(), args));
 
             that.log([
-                'Minified ',
+                'Transformed ',
                 filename,
                 ', took ',
                 time.humanize(Date.now() - startTime),
                 ' (',
                 number.bytes(original.length),
                 ' -> ',
-                number.bytes(minified.length),
+                number.bytes(transformed.length),
                 ', ',
-                (((minified.length / original.length) - 1) * 100).toFixed(1),
+                (((transformed.length / original.length) - 1) * 100).toFixed(1),
                 '%)'
             ].join(''));
         });
