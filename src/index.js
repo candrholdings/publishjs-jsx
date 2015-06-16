@@ -13,6 +13,10 @@
 
         var that = this;
 
+        inputs.deleted.forEach(function (filename) {
+            outputs[filename] = null;
+        });
+
         inputs = inputs.newOrChanged;
 
         Object.getOwnPropertyNames(inputs).forEach(function (filename) {
