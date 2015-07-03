@@ -22,31 +22,39 @@
         Object.getOwnPropertyNames(inputs).forEach(function (filename) {
             var startTime = Date.now(),
                 original = inputs[filename],
-                transformed = outputs[filename] = new Buffer(processFile(filename, original.toString(), args));
+                transformed = processFile(filename, original.toString(), args);
 
-            that.log([
-                'Transformed ',
-                filename,
-                ', took ',
-                time.humanize(Date.now() - startTime),
-                ' (',
-                number.bytes(original.length),
-                ' -> ',
-                number.bytes(transformed.length),
-                ', ',
-                (((transformed.length / original.length) - 1) * 100).toFixed(1),
-                '%)'
-            ].join(''));
+            if (transformed) {
+                var transformedBuffer = outputs[filename] = new Buffer(transformed);
+
+                that.log([
+                    'Transformed ',
+                    filename,
+                    ', took ',
+                    time.humanize(Date.now() - startTime),
+                    ' (',
+                    number.bytes(original.length),
+                    ' -> ',
+                    number.bytes(transformedBuffer.length),
+                    ', ',
+                    (((transformedBuffer.length / original.length) - 1) * 100).toFixed(1),
+                    '%)'
+                ].join(''));
+            } else {
+                outputs[filename] = original;
+            }
         });
 
         callback(null, outputs);
     };
 
     function processFile(filename, content, args) {
-        if ((path.extname(filename) || '').toLowerCase() === '.html') {
+        var extname = (path.extname(filename) || '').toLowerCase();
+
+        if (extname === '.html' || extname === '.htm') {
             return processHTML(content, args);
-        } else  {
-            return processCSS(content, args);
+        } else if (extname === '.js' || extname === '.jsx') {
+            return processJS(content, args);
         }
     }
 
@@ -64,7 +72,7 @@
         );
     }
 
-    function processCSS(code, args) {
+    function processJS(code, args) {
         return jsx.transform(code, args);
     }
 
