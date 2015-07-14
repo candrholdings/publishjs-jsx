@@ -22,7 +22,14 @@
         Object.getOwnPropertyNames(inputs).forEach(function (filename) {
             var startTime = Date.now(),
                 original = inputs[filename],
+                transformed;
+
+            try {
                 transformed = processFile(filename, original.toString(), args);
+            } catch (ex) {
+                that.log('Failed to process ' + filename + ' due to ' + ex.message);
+                throw ex;
+            }
 
             if (transformed) {
                 var transformedBuffer = outputs[filename] = new Buffer(transformed);
