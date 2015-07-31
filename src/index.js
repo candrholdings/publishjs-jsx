@@ -1,4 +1,4 @@
-!function (jsx, path, util) {
+!function (babel, path, util) {
     'use strict';
 
     var number = util.number,
@@ -59,28 +59,28 @@
         var extname = (path.extname(filename) || '').toLowerCase();
 
         if (extname === '.html' || extname === '.htm') {
-            return processHTML(content, args);
+            return processHTML(content, args, filename);
         } else if (extname === '.js' || extname === '.jsx') {
-            return processJS(content, args);
+            return processJS(content, args, filename);
         }
     }
 
-    function processHTML(html, args) {
+    function processHTML(html, args, filename) {
         return replaceMultiple(
             html,
             [
                 [
                     /(<script [^>]*?type=")(text\/jsx)([^"]*)("[^>]*>)([\s\S]*?)(<\/script>)/gmi,
                     function (match0, match1, match2, match3, match4, match5, match6, index, input) {
-                        return match1 + 'text/javascript' + match4 + jsx.transform(match5, extend({}, args, parseSwitches(match3))) + match6;
+                        return match1 + 'text/javascript' + match4 + babel.transform(match5, extend({ filename: filename, whitelist: ['react'] }, args, parseSwitches(match3))).code + match6;
                     }
                 ]
             ]
         );
     }
 
-    function processJS(code, args) {
-        return jsx.transform(code, args);
+    function processJS(code, args, filename) {
+        return babel.transform(code, extend({ filename: filename, whitelist: ['react'] }, args)).code;
     }
 
     function parseSwitches(str) {
@@ -124,7 +124,7 @@
         return Math.max(0, text.split('\n').length - 3);
     }
 }(
-    require('react-tools'),
+    require('babel-core'),
     require('path'),
     require('publishjs').util
 );

@@ -21,8 +21,8 @@
     "test": "vows src/test/*-test.js --spec"
   },
   "dependencies": {
-    "publishjs": "git:git@github.com:candrholdings/publishjs.git",
-    "react-tools": "^0.13.3"
+    "babel-core": "^5.8.19",
+    "publishjs": "git:git@github.com:candrholdings/publishjs.git"
   },
   "devDependencies": {
     "async": "^1.0.0",
