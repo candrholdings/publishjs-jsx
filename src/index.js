@@ -72,7 +72,11 @@
                 [
                     /(<script [^>]*?type=")(text\/jsx)([^"]*)("[^>]*>)([\s\S]*?)(<\/script>)/gmi,
                     function (match0, match1, match2, match3, match4, match5, match6, index, input) {
-                        return match1 + 'text/javascript' + match4 + babel.transform(match5, extend({ filename: filename }, args, parseSwitches(match3))).code + match6;
+                        var options = extend({ filename: filename }, args, parseSwitches(match3));
+
+                        (options.optional || (options.optional = [])).push('react');
+
+                        return match1 + 'text/javascript' + match4 + babel.transform(match5, options).code + match6;
                     }
                 ]
             ]
@@ -80,7 +84,11 @@
     }
 
     function processJS(code, args, filename) {
-        return babel.transform(code, extend({ filename: filename }, args)).code;
+        var options = extend({ filename: filename }, args);
+
+        (options.optional || (options.optional = [])).push('react');
+
+        return babel.transform(code, options).code;
     }
 
     function parseSwitches(str) {
