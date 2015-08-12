@@ -72,11 +72,19 @@
                 [
                     /(<script [^>]*?type=")(text\/jsx)([^"]*)("[^>]*>)([\s\S]*?)(<\/script>)/gmi,
                     function (match0, match1, match2, match3, match4, match5, match6, index, input) {
-                        var options = extend({ filename: filename }, args, parseSwitches(match3));
+                        var options = extend({ filename: filename }, args, parseSwitches(match3)),
+                            transformed;
 
                         (options.optional || (options.optional = [])).push('react');
 
-                        return match1 + 'text/javascript' + match4 + babel.transform(match5, options).code + match6;
+                        try {
+                            transformed = babel.transform(match5, options).code;
+                        } catch (ex) {
+                            ex.stack = formatErrorMessage(ex.stack);
+                            throw ex;
+                        }
+
+                        return match1 + 'text/javascript' + match4 + transformed + match6;
                     }
                 ]
             ]
@@ -84,11 +92,25 @@
     }
 
     function processJS(code, args, filename) {
-        var options = extend({ filename: filename }, args);
+        var options = extend({ filename: filename }, args),
+            transformed;
 
         (options.optional || (options.optional = [])).push('react');
 
-        return babel.transform(code, options).code;
+        try {
+            transformed = babel.transform(code, options).code;
+        } catch (ex) {
+            ex.stack = formatErrorMessage(ex.stack);
+            throw ex;
+        }
+
+        return transformed;
+    }
+
+    function formatErrorMessage(message) {
+        return message.split('\n').map(function (line, index) {
+            return (!index || /^\s*at/.test(line) ? '' : '\u001b[m') + line;
+        }).join('\n');
     }
 
     function parseSwitches(str) {
