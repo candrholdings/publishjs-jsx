@@ -1,6 +1,6 @@
 {
   "name": "publishjs-jsx",
-  "version": "0.0.2-dev",
+  "version": "0.0.3",
   "description": "Integrate JSX with PublishJS",
   "keywords": [
     "jsx",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "babel-core": "^5.8.19",
-    "publishjs": "*"
+    "publishjs": "^0.0.3"
   },
   "devDependencies": {
     "async": "^1.0.0",
